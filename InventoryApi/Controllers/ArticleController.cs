@@ -1,6 +1,7 @@
 ﻿using Api.Mapper;
 using Api.ViewModels.Request;
 using Application.Service;
+using Application.Service.Interface;
 using AutoMapper;
 using InventoryApi.ViewModels;
 using InventoryApi.ViewModels.Result;
@@ -17,11 +18,15 @@ namespace InventoryApi.Controllers
     [Route("api/[controller]")]
     public class ArticleController: ControllerBase
     {
-        private readonly IArticleService _svc;
+        private readonly IGetArticleService _getSvc;
+        private readonly IUpdateArticleService _updateSvc;
+        private readonly IDeleteArticleService _deleteSvc;
 
-        public ArticleController(IArticleService svc)
+        public ArticleController(IGetArticleService getSvc, IUpdateArticleService updateSvc, IDeleteArticleService deleteSvc)
         {
-            _svc = svc;
+            _getSvc = getSvc;
+            _updateSvc = updateSvc;
+            _deleteSvc = deleteSvc;
         }
 
         [HttpPost("list")]
@@ -33,7 +38,7 @@ namespace InventoryApi.Controllers
                 return BadRequest("Parameters not valid");
             }
 
-            var dto = _svc.List(filter.ToDto());
+            var dto = _getSvc.List(filter.ToDto());
             if (dto != null)
                 return Ok(dto.ToVm());
 
@@ -50,7 +55,7 @@ namespace InventoryApi.Controllers
                 //Log errors
                 return BadRequest("Article Id cannot be < 0");
             }
-            var dto = _svc.Get(id);
+            var dto = _getSvc.Get(id);
             if (dto != null)
                 return Ok(dto.ToVm());
 
@@ -66,7 +71,7 @@ namespace InventoryApi.Controllers
                 return BadRequest(false);
             }
 
-            return Ok(_svc.Edit(article.ToDto()));
+            return Ok(_updateSvc.Edit(article.ToDto()));
         }
 
         [HttpDelete("delete/{id}")]
@@ -78,7 +83,7 @@ namespace InventoryApi.Controllers
                 return BadRequest("Article Id cannot be < 0");
             }
 
-            return Ok(_svc.Delete(id));
+            return Ok(_deleteSvc.Delete(id));
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Application.Service;
+using Application.Service.Implementation;
+using Application.Service.Interface;
 using Domains.Repository;
 using Infra.Ef;
 using Infra.Ef.Repository;
@@ -15,7 +17,9 @@ namespace Infra.IoC
 
             services.AddScoped<IArticleRepository, ArticleRepository>();
 
-            services.AddScoped<IArticleService, ArticleService>();
+            services.AddScoped<IGetArticleService, GetArticleService>();
+            services.AddScoped<IDeleteArticleService, DeleteArticleService>();
+            services.AddScoped<IUpdateArticleService, UpdateArticleService>();
         }
     }
 }

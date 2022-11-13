@@ -1,51 +1,22 @@
 ﻿using Application.Dtos;
+using Application.Service.Interface;
 using AutoMapper;
-using Domains.Entities;
 using Domains.Repository;
 using Domains.Repository.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Service
+namespace Application.Service.Implementation
 {
-    public class ArticleService : IArticleService
+    public class GetArticleService : IGetArticleService
     {
         private readonly IArticleRepository _repo;
         private readonly IMapper _mapper;
-
-        public ArticleService(IArticleRepository repo, IMapper mapper)
+        public GetArticleService(IArticleRepository repo, IMapper mapper)
         {
             _repo = repo;
             _mapper = mapper;
-        }
-
-        public bool Add(ArticleDto article)
-        {
-            if (article == null)
-            {
-                //Log error
-                return false;
-            }
-            return _repo.Add(_mapper.Map<Article>(article));            
-        }
-
-        public bool Delete(int id)
-        {
-            return _repo.Delete(id);
-        }
-
-        public bool Edit(ArticleDto article)
-        {
-            if (article == null)
-            {
-                //Log error
-                return false;
-            }
-            if (article.Id == 0)
-                return _repo.Add(_mapper.Map<Article>(article));
-            else
-                return _repo.Edit(_mapper.Map<Article>(article));
         }
 
         public ArticleDto Get(int id)
